@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        <%=title%>
+    </title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1>Data Siswa</h1>
+    <div class="container">
+        <a class="tambah" href="biodata/create ">Tambah data</a>
+        <div class="data-show">
+            <table border=" 1 " cellpadding="5 " align="center ">
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Jurusan</th>
+                    <th>Nomer Absen</th>
+                    <th>Alamat</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Aksi</th>
+                </tr>
+                <% data.forEach(function(data) { %>
+                    <tr>
+                        <td>
+                            <%=nomer++%>.
+                        </td>
+                        <td>
+                            <%=data.nama%>
+                        </td>
+                        <td>
+                            <%=data.jurusan%>
+                        </td>
+                        <td>
+                            <%=data.absen%>
+                        </td>
+                        <td>
+                            <%=data.alamat%>
+                        </td>
+                        <td>
+                            <%=data.jk%>
+                        </td>
+                        <td>
+                            <div class="group ">
+                                <a class="edit" href="biodata/<%=data.id%>/edit ">Edit</a>
+                                <form action="biodata/<%=data.id%>?_method=DELETE" method="post">
+                                    <input type="submit" class="hapus" value="Hapus" onclick="return confirm('Apakah anda ingin menghapus data ini ?')">
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+</script>
+
+</html>
