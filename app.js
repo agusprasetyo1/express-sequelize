@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const biodataRouter = require('./routers/biodata')
 const methodOverride = require('method-override')
+
 //Set template Engine
 app.set('view engine', 'ejs')
 
@@ -11,9 +12,7 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
-// app.get('/', (req, res) => {
-// res.
-// })
+
 //Untuk menginisialisasi Method ex : Method = 'PUT' dan 'DELETE
 app.use(methodOverride('_method'))
 

@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../sequelize')
+const sequelize = require('../sequelize') // Memanggil data sequelize
 
+//Membuat tabel dengan nama 'biodata' beserta kolom-kolomnya
 const biodata = sequelize.define('biodata', {
     nama: {
         type: Sequelize.STRING(100),

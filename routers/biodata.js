@@ -1,33 +1,92 @@
 const express = require('express')
 const router = express.Router()
-const biodataController = require('../controllers/biodataController')
+const biodataModel = require('../models/biodata') //memanggil model pada folder 'models'
 
-router.get('/', biodataController.index)
+router.get('/', (req, res) => { //Untuk Menampilkan
+    biodataModel.findAll()
+        .then(data => {
+            res.render('biodata/index', {
+                nomer: 1,
+                title: 'Biodata',
+                data: data
+            })
+        })
+        .catch(err => {
+            res.json("Something error => " + err)
+        })
+})
+router.get('/create', (req, res) => { //Menampilkan form inputan penambahan
+    res.render('biodata/create', {
+        title: 'Tambah siswa'
+    })
+})
+router.post('/create', (req, res) => { //Menyimpan inputan penambahan
+    let data = req.body
+    biodataModel.create({
+            nama: data.nama,
+            jurusan: data.jurusan,
+            absen: data.absen,
+            alamat: data.alamat,
+            jk: data.jk
+        })
+        .then(() => {
+            res.redirect('/biodata')
+        })
+        .catch((err) => {
+            res.json('Something error ' + err)
+        })
+})
+router.get('/:id/edit', (req, res) => { //Menampilkan form inputan edit
+    biodataModel.findAll({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((data) => {
+            if (data[0].id == req.params.id) {
+                res.render('biodata/edit', {
+                    title: 'Edit siswa',
+                    data: data
+                })
+            }
+        })
+        .catch((err) => {
+            res.json('Something error => ' + err + " Status code " + res.statusCode)
+        })
+})
+router.put('/:id', (req, res) => { //Menyimpan inputan edit
+    biodataModel.findByPrimary(req.params.id)
+        .then(data => {
+            data.update({
+                nama: req.body.nama,
+                jurusan: req.body.jurusan,
+                absen: req.body.absen,
+                alamat: req.body.alamat,
+                jk: req.body.jk
+            })
+            res.send('<script>alert("Update data sukses"); window.location="/biodata";</script>')
+        })
+        .catch((err) => {
+            res.json('Something error ' + err)
+        })
+})
+router.delete('/:id', (req, res) => { //Untuk menghapus
+    biodataModel.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then(deleteData => {
+            if (deleteData === 1) {
+                res.send('<script>alert("Data berhasil dihapus"); window.location.href="/biodata";</script>')
+            } else {
+                res.send('<script>alert("Data tidak ditemukan"); window.location.href="/biodata";</script>')
+            }
+        })
 
-router.get('/create', biodataController.create)
-router.post('/create', biodataController.store)
-router.get('/:id/edit', biodataController.edit)
-router.put('/:id', biodataController.update)
-router.delete('/:id', biodataController.destroy)
-//Seharusnnya menggunakan router.put
-// router.get('/', (req, res) => {
-//     res.render('biodata/index', {
-//         judul: "Mencoba",
-//         nama: "Melkan",
-//         jurusan: "Rekayasa Perangkat Lunak",
-//         absen: 1,
-//         alamat: "Gesikharjo",
-//         jk: "Laki-laki"
-//     })
-// })
-// router.get('/create', (req, res) => {
-//     res.render('biodata/create', {
-//         judul: 'Tambah siswa'
-//     })
-// })
-
-// router.post('/create', (req, res) => {
-//     console.log(req.body);
-// })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+})
 
 module.exports = router
