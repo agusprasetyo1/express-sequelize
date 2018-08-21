@@ -23,6 +23,6 @@ app.use(express.static(__dirname + '/public'))
 app.use('/biodata', biodataRouter)
 
 //Server
-app.listen(3000, 'localhost', () => {
+app.listen(3000, () => {
     console.log('Server listened in port : ' + 3000)
 })
